@@ -1,4 +1,5 @@
 import { getConnection } from 'typeorm'
+import bcrypt = require('bcrypt')
 import { User } from '../../entity/User'
 
 const Mutation = {
@@ -11,10 +12,11 @@ const Mutation = {
         password
       }: { username: string; email: string; password: string }
     ) => {
+      const hashedPassword = await bcrypt.hash(password, 10)
       const user = new User()
       user.username = username
       user.email = email
-      user.password = password
+      user.password = hashedPassword
 
       const userRepository = getConnection().getRepository(User)
 

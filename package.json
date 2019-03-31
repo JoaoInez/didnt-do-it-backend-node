@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Awesome project developed with TypeORM.",
   "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/node": "^8.10.45",
     "@types/ramda": "^0.26.5",
     "nodemon": "^1.18.10",
@@ -18,8 +19,7 @@
     "pg": "^7.9.0",
     "ramda": "^0.26.1",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.16",
-    "uuid": "^3.3.2"
+    "typeorm": "^0.2.16"
   },
   "scripts": {
     "start": "ts-node src/index.ts",

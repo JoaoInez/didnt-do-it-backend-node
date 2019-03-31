@@ -6,12 +6,11 @@ type User {
 }
 
 type Query {
-  "A simple type for getting started!"
-  helloWorld: String!
   "Finds all users"
   users: [User]!
 }
 
 type Mutation {
+  "Creates a new user"
   signUp(username: String!, email: String!, password: String!): User
 }
