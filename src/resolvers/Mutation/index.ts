@@ -3,27 +3,52 @@ import bcrypt = require('bcrypt')
 import { User } from '../../entity/User'
 
 const Mutation = {
-  Mutation: {
-    signUp: async (
-      _: any,
-      {
-        username,
-        email,
-        password
-      }: { username: string; email: string; password: string }
-    ) => {
-      const hashedPassword = await bcrypt.hash(password, 10)
-      const user = new User()
-      user.username = username
-      user.email = email
-      user.password = hashedPassword
+  signUp: async (
+    _: any,
+    {
+      username,
+      email,
+      password
+    }: { username: string; email: string; password: string }
+  ) => {
+    const userRepository = getConnection().getRepository(User)
 
-      const userRepository = getConnection().getRepository(User)
+    const usernameInUse = await userRepository.findOne({
+      where: {
+        username: username
+      }
+    })
 
-      await userRepository.save(user)
-
-      return user
+    if (usernameInUse) {
+      return {
+        message: 'USERNAME_IN_USE'
+      }
     }
+
+    const emailInUse = await userRepository.findOne({
+      where: { email: email }
+    })
+
+    if (emailInUse) {
+      return {
+        message: 'EMAIL_IN_USE'
+      }
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const user = new User()
+    user.username = username
+    user.email = email
+    user.password = hashedPassword
+
+    const result = await userRepository
+      .save(user)
+      .then(_user => _user)
+      .catch(() => ({
+        message: 'DB_ERROR'
+      }))
+
+    return result
   }
 }
 
