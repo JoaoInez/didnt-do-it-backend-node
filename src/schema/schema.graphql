@@ -2,15 +2,36 @@ type User {
   id: ID!
   username: String!
   email: String!
-  password: String!
+}
+
+type Message {
+  message: String!
+}
+
+enum SignUpErrors {
+  USERNAME_IN_USE
+  EMAIL_IN_USE
+  DB_ERROR
+}
+
+type SignUpMessage {
+  message: SignUpErrors
+}
+
+"Returns either an user or an error message"
+union SignUpResult = User | SignUpMessage
+
+input usersInput {
+  username: String
+  email: String
 }
 
 type Query {
   "Finds all users"
-  users: [User]!
+  users(where: usersInput): [User]!
 }
 
 type Mutation {
   "Creates a new user"
-  signUp(username: String!, email: String!, password: String!): User
+  signUp(username: String!, email: String!, password: String!): SignUpResult
 }
