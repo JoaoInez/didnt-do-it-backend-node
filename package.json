@@ -4,20 +4,25 @@
   "description": "Awesome project developed with TypeORM.",
   "devDependencies": {
     "@types/node": "^8.10.45",
+    "@types/ramda": "^0.26.5",
+    "nodemon": "^1.18.10",
     "ts-node": "^3.3.0",
     "typescript": "^2.5.2"
   },
   "dependencies": {
     "apollo-server-express": "^2.4.8",
+    "bcrypt": "^3.0.5",
     "express": "^4.16.4",
     "graphql": "^14.2.0",
-    "nodemon": "^1.18.10",
+    "graphql-import": "^0.7.1",
     "pg": "^7.9.0",
+    "ramda": "^0.26.1",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.16"
+    "typeorm": "^0.2.16",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "ts-node src/index.ts",
-    "dev": "nodemon --exec ts-node src/index.ts"
+    "dev": "nodemon -e js,ts,graphql --exec ts-node src/index.ts"
   }
 }

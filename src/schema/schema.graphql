@@ -1,0 +1,17 @@
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  password: String!
+}
+
+type Query {
+  "A simple type for getting started!"
+  helloWorld: String!
+  "Finds all users"
+  users: [User]!
+}
+
+type Mutation {
+  signUp(username: String!, email: String!, password: String!): User
+}
