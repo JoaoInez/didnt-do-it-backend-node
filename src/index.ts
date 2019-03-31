@@ -1,22 +1,19 @@
 import 'reflect-metadata'
-const express = require('express')
-const { ApolloServer, gql } = require('apollo-server-express')
+import { createConnection } from 'typeorm'
+import express = require('express')
+import { ApolloServer, gql } from 'apollo-server-express'
+import { importSchema } from 'graphql-import'
+import path = require('path')
+import * as R from 'ramda'
+import Query from './resolvers/Query'
+import Mutation from './resolvers/Mutation'
+
+const typeDefs = importSchema('src/schema/schema.graphql')
 
 const app = express()
 const port = 4000
 
-const typeDefs = gql`
-  type Query {
-    "A simple type for getting started!"
-    hello: String
-  }
-`
-
-const resolvers = {
-  Query: {
-    hello: () => 'hello world'
-  }
-}
+const resolvers = R.mergeLeft(Query, Mutation)
 
 const server = new ApolloServer({
   typeDefs,
@@ -25,8 +22,12 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app })
 
-app.get('/hello-world', (req, res) => res.send('Hello World!'))
+app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')))
 
-app.listen({ port }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-)
+createConnection().then(() => {
+  app.listen({ port }, () =>
+    console.log(
+      `🚀 Server running at http://localhost:4000${server.graphqlPath}`
+    )
+  )
+})
