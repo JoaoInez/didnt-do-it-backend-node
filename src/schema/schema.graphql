@@ -4,6 +4,12 @@ type User {
   email: String!
 }
 
+type Todo {
+  id: ID!
+  task: String!
+  completed: Boolean!
+}
+
 type Message {
   message: String!
 }
@@ -14,24 +20,49 @@ enum SignUpErrors {
   DB_ERROR
 }
 
+enum CreateTodoErrors {
+  DB_ERROR
+}
+
 type SignUpMessage {
-  message: SignUpErrors
+  message: SignUpErrors!
+}
+
+type CreateTodoMessage {
+  message: CreateTodoErrors!
 }
 
 "Returns either an user or an error message"
 union SignUpResult = User | SignUpMessage
 
-input usersInput {
+"Returns either a todo or an error message"
+union CreateTodoResult = Todo | CreateTodoMessage
+
+input UsersInput {
   username: String
   email: String
 }
 
+input SignUpInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
+input CreateTodoInput {
+  task: String!
+}
+
 type Query {
   "Finds all users"
-  users(where: usersInput): [User]!
+  users(where: UsersInput): [User]!
+  "Finds all todos"
+  todos: [Todo]!
 }
 
 type Mutation {
   "Creates a new user"
-  signUp(username: String!, email: String!, password: String!): SignUpResult
+  signUp(data: SignUpInput): SignUpResult!
+  "Creates a new todo"
+  createTodo(data: CreateTodoInput): CreateTodoResult!
 }

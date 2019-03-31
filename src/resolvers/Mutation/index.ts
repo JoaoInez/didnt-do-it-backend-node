@@ -1,16 +1,10 @@
 import { getConnection } from 'typeorm'
 import bcrypt = require('bcrypt')
 import { User } from '../../entity/User'
+import { Todo } from '../../entity/Todo'
 
 const Mutation = {
-  signUp: async (
-    _: any,
-    {
-      username,
-      email,
-      password
-    }: { username: string; email: string; password: string }
-  ) => {
+  signUp: async (_: any, { data: { username, email, password } }) => {
     const userRepository = getConnection().getRepository(User)
 
     const usernameInUse = await userRepository.findOne({
@@ -47,6 +41,19 @@ const Mutation = {
       .catch(() => ({
         message: 'DB_ERROR'
       }))
+
+    return result
+  },
+  createTodo: async (_: any, { data: { task } }) => {
+    const todoRepository = getConnection().getRepository(Todo)
+
+    const todo = new Todo()
+    todo.task = task
+
+    const result = await todoRepository
+      .save(todo)
+      .then(_todo => _todo)
+      .catch(() => ({ message: 'DB_ERROR' }))
 
     return result
   }

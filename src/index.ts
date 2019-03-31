@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import express = require('express')
-import { ApolloServer, gql } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import { importSchema } from 'graphql-import'
 import path = require('path')
 import Query from './resolvers/Query'
