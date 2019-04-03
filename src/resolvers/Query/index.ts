@@ -8,12 +8,9 @@ const Query = {
     return await userRepository.find({
       where: {
         ...where
-      }
+      },
+      relations: ['tasks']
     })
-  },
-  todos: async () => {
-    const todoRepository = getConnection().getRepository(Todo)
-    return await todoRepository.find()
   }
 }
 

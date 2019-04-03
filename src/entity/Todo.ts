@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import { User } from './User'
 
 @Entity()
 export class Todo {
@@ -10,4 +11,7 @@ export class Todo {
 
   @Column('boolean', { default: false })
   completed: boolean
+
+  @ManyToOne(type => User, user => user.tasks)
+  user: User
 }

@@ -44,11 +44,25 @@ const Mutation = {
 
     return result
   },
-  createTodo: async (_: any, { data: { task } }) => {
+  createTodo: async (_: any, { data: { task, id } }) => {
+    const userRepository = getConnection().getRepository(User)
     const todoRepository = getConnection().getRepository(Todo)
+
+    const user = await userRepository.findOne({
+      where: {
+        id
+      }
+    })
+
+    if (!user) {
+      return {
+        message: 'SERVER_ERROR'
+      }
+    }
 
     const todo = new Todo()
     todo.task = task
+    todo.user = user
 
     const result = await todoRepository
       .save(todo)
