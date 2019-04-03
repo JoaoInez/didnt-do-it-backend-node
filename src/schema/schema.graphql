@@ -2,6 +2,7 @@ type User {
   id: ID!
   username: String!
   email: String!
+  tasks: [Todo]!
 }
 
 type Todo {
@@ -22,6 +23,7 @@ enum SignUpErrors {
 
 enum CreateTodoErrors {
   DB_ERROR
+  SERVER_ERROR
 }
 
 type SignUpMessage {
@@ -51,13 +53,12 @@ input SignUpInput {
 
 input CreateTodoInput {
   task: String!
+  id: ID!
 }
 
 type Query {
   "Finds all users"
   users(where: UsersInput): [User]!
-  "Finds all todos"
-  todos: [Todo]!
 }
 
 type Mutation {
