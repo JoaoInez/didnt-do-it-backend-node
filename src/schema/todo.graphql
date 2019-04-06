@@ -1,0 +1,46 @@
+type Todo {
+  id: ID!
+  task: String!
+  completed: Boolean!
+}
+
+enum CreateTodoErrors {
+  SERVER_ERROR
+  DB_ERROR
+}
+
+enum CompleteTodoErrors {
+  SERVER_ERROR
+  DB_ERROR
+}
+
+type CreateTodoMessage {
+  message: CreateTodoErrors!
+}
+
+type CompleteTodoMessage {
+  message: CompleteTodoErrors!
+}
+
+"Returns either a todo or an error message"
+union CreateTodoResult = Todo | CreateTodoMessage
+
+"Returns either a todo or an error message"
+union CompleteTodoResult = Todo | CompleteTodoMessage
+
+input CreateTodoInput {
+  task: String!
+  id: ID!
+}
+
+input CompleteTodoInput {
+  id: ID!
+  completed: Boolean!
+}
+
+type Mutation {
+  "Creates a new todo"
+  createTodo(data: CreateTodoInput!): CreateTodoResult!
+  "Updates todo"
+  updateTodo(data: CompleteTodoInput!): CompleteTodoResult!
+}

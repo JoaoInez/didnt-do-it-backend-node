@@ -1,17 +1,8 @@
-import { getConnection } from 'typeorm'
-import { User } from '../../entity/User'
-import { Todo } from '../../entity/Todo'
+import UserQuery from './User'
+import R = require('ramda')
 
-const Query = {
-  users: async (_: any, { where }) => {
-    const userRepository = getConnection().getRepository(User)
-    return await userRepository.find({
-      where: {
-        ...where
-      },
-      relations: ['tasks']
-    })
-  }
-}
+const queries = [UserQuery]
+
+const Query = R.reduce(R.mergeRight, {})(queries)
 
 export default Query

@@ -1,6 +1,6 @@
 const Union = {
   SignUpResult: {
-    __resolveType(_: any, ctx: any, info: any) {
+    __resolveType(_: any) {
       if (_.id || _.username || _.email) {
         return 'User'
       }
@@ -11,12 +11,23 @@ const Union = {
     }
   },
   CreateTodoResult: {
-    __resolveType(_: any, ctx: any, info: any) {
+    __resolveType(_: any) {
       if (_.task || _.completed) {
         return 'Todo'
       }
       if (_.message) {
         return 'CreateTodoMessage'
+      }
+      return null
+    }
+  },
+  CompleteTodoResult: {
+    __resolveType(_: any) {
+      if (_.task || _.completed) {
+        return 'Todo'
+      }
+      if (_.message) {
+        return 'CompleteTodoMessage'
       }
       return null
     }
