@@ -1,0 +1,41 @@
+# import Todo from "todo.graphql"
+
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  tasks: [Todo]!
+}
+
+enum SignUpErrors {
+  USERNAME_IN_USE
+  EMAIL_IN_USE
+  DB_ERROR
+}
+
+type SignUpMessage {
+  message: SignUpErrors!
+}
+
+"Returns either an user or an error message"
+union SignUpResult = User | SignUpMessage
+
+input UserInput {
+  id: ID!
+}
+
+input SignUpInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
+type Query {
+  "Finds a user"
+  user(where: UserInput!): User!
+}
+
+type Mutation {
+  "Creates a new user"
+  signUp(data: SignUpInput): SignUpResult!
+}
