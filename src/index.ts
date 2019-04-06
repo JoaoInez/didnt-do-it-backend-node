@@ -4,10 +4,7 @@ import express = require('express')
 import { ApolloServer } from 'apollo-server-express'
 import { importSchema } from 'graphql-import'
 import path = require('path')
-import Query from './resolvers/Query'
-import Mutation from './resolvers/Mutation'
-import Union from './resolvers/Union'
-
+import resolvers from './resolvers'
 const typeDefs = importSchema('src/schema/schema.graphql')
 
 const app = express()
@@ -15,11 +12,7 @@ const port = 4000
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers: {
-    Query,
-    Mutation,
-    ...Union
-  }
+  resolvers
 })
 
 server.applyMiddleware({ app })
