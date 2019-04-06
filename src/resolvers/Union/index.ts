@@ -20,6 +20,17 @@ const Union = {
       }
       return null
     }
+  },
+  CompleteTodoResult: {
+    __resolveType(_: any) {
+      if (_.task || _.completed) {
+        return 'Todo'
+      }
+      if (_.message) {
+        return 'CompleteTodoMessage'
+      }
+      return null
+    }
   }
 }
 
