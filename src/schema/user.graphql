@@ -13,12 +13,23 @@ enum SignUpErrors {
   DB_ERROR
 }
 
+enum LoginErrors {
+  BAD_CREDENTIALS
+}
+
 type SignUpMessage {
   message: SignUpErrors!
 }
 
+type LogInMessage {
+  message: LoginErrors!
+}
+
 "Returns either an user or an error message"
 union SignUpResult = User | SignUpMessage
+
+"Returns either an user or an error message"
+union LogInResult = User | LogInMessage
 
 input UserInput {
   id: ID!
@@ -30,6 +41,11 @@ input SignUpInput {
   password: String!
 }
 
+input LogInInput {
+  email: String!
+  password: String!
+}
+
 type Query {
   "Finds a user"
   user(where: UserInput!): User!
@@ -37,5 +53,7 @@ type Query {
 
 type Mutation {
   "Creates a new user"
-  signUp(data: SignUpInput): SignUpResult!
+  signUp(data: SignUpInput!): SignUpResult!
+  "Logs in a user"
+  logIn(data: LogInInput!): LogInResult!
 }

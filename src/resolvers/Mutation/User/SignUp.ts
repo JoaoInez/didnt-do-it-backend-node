@@ -3,13 +3,14 @@ import bcrypt = require('bcrypt')
 import { User } from '../../../entity/User'
 
 const SignUp = {
-  signUp: async (_: any, { data: { username, email, password } }) => {
+  signUp: async (_: any, { data: { username, email, password } }, ctx: any) => {
     const userRepository = getConnection().getRepository(User)
 
     const usernameInUse = await userRepository.findOne({
       where: {
-        username: username
-      }
+        username
+      },
+      relations: ['tasks']
     })
 
     if (usernameInUse) {
@@ -36,7 +37,10 @@ const SignUp = {
 
     const result = await userRepository
       .save(user)
-      .then(_user => _user)
+      .then(_user => {
+        // TODO user auth
+        return _user
+      })
       .catch(() => ({
         message: 'DB_ERROR'
       }))

@@ -4,12 +4,12 @@ import express = require('express')
 import { ApolloServer } from 'apollo-server-express'
 import { importSchema } from 'graphql-import'
 import path = require('path')
-import cookieParser = require('cookie-parser')
+import cors = require('cors')
 import resolvers from './resolvers'
 const typeDefs = importSchema('src/schema/schema.graphql')
 
-const app = express()
 const port = 4000
+const app = express()
 
 const server = new ApolloServer({
   typeDefs,
@@ -17,8 +17,6 @@ const server = new ApolloServer({
 })
 
 server.applyMiddleware({ app })
-
-app.use(cookieParser('', {}))
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')))
 
