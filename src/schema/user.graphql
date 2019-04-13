@@ -4,7 +4,7 @@ type User {
   id: ID!
   username: String!
   email: String!
-  tasks: [Todo]!
+  todos: [Todo]!
 }
 
 enum SignUpErrors {
@@ -13,8 +13,12 @@ enum SignUpErrors {
   DB_ERROR
 }
 
-enum LoginErrors {
+enum LogInErrors {
   BAD_CREDENTIALS
+}
+
+enum SignOutMessages {
+  SIGNED_OUT
 }
 
 type SignUpMessage {
@@ -22,7 +26,7 @@ type SignUpMessage {
 }
 
 type LogInMessage {
-  message: LoginErrors!
+  message: LogInErrors!
 }
 
 "Returns either an user or an error message"
@@ -30,6 +34,10 @@ union SignUpResult = User | SignUpMessage
 
 "Returns either an user or an error message"
 union LogInResult = User | LogInMessage
+
+type SignOutResult {
+  message: SignOutMessages!
+}
 
 input UserInput {
   id: ID!
@@ -47,8 +55,8 @@ input LogInInput {
 }
 
 type Query {
-  "Finds a user"
-  user(where: UserInput!): User!
+  "Gets current user"
+  currentUser: User
 }
 
 type Mutation {
@@ -56,4 +64,6 @@ type Mutation {
   signUp(data: SignUpInput!): SignUpResult!
   "Logs in a user"
   logIn(data: LogInInput!): LogInResult!
+  "Signs out a user"
+  signOut: SignOutResult!
 }

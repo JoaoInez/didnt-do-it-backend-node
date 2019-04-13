@@ -1,5 +1,6 @@
 import { getConnection } from 'typeorm'
 import bcrypt = require('bcrypt')
+import jwt = require('jsonwebtoken')
 import { User } from '../../../entity/User'
 
 const SignUp = {
@@ -10,7 +11,7 @@ const SignUp = {
       where: {
         username
       },
-      relations: ['tasks']
+      relations: ['todos']
     })
 
     if (usernameInUse) {
@@ -38,7 +39,11 @@ const SignUp = {
     const result = await userRepository
       .save(user)
       .then(_user => {
-        // TODO user auth
+        const token = jwt.sign({ currentUser: _user.id }, 'mysecret123')
+
+        ctx.res.cookie('token', token, {
+          maxAge: 1000 * 60 * 60 * 24 * 365
+        })
         return _user
       })
       .catch(() => ({

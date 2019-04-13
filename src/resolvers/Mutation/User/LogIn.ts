@@ -1,5 +1,6 @@
 import { getConnection } from 'typeorm'
 import bcrypt = require('bcrypt')
+import jwt = require('jsonwebtoken')
 import { User } from '../../../entity/User'
 
 const LogIn = {
@@ -10,7 +11,7 @@ const LogIn = {
       where: {
         email
       },
-      relations: ['tasks']
+      relations: ['todos']
     })
 
     if (!user) {
@@ -25,7 +26,11 @@ const LogIn = {
       return { error: 'INVALID_CREDENTIALS' }
     }
 
-    // TODO user auth
+    const token = jwt.sign({ currentUser: user.id }, 'mysecret123')
+
+    ctx.res.cookie('token', token, {
+      maxAge: 1000 * 60 * 60 * 24 * 365
+    })
 
     return user
   }
