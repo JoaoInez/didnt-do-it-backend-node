@@ -1,7 +1,7 @@
 import R = require('ramda')
-import { GetUser as User } from './User'
+import { CurrentUser } from './CurrentUser'
 
-const queries = [User]
+const queries = [CurrentUser]
 
 const UserQuery = R.reduce(R.mergeRight, {})(queries)
 

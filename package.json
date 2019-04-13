@@ -1,9 +1,11 @@
 {
   "name": "backend-node",
   "version": "0.0.1",
-  "description": "Awesome project developed with TypeORM.",
+  "description": "",
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
+    "@types/cookie-parser": "^1.4.1",
+    "@types/jsonwebtoken": "^8.3.2",
     "@types/node": "^8.10.45",
     "@types/ramda": "^0.26.5",
     "nodemon": "^1.18.10",

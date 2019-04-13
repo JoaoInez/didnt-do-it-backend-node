@@ -1,15 +1,17 @@
 import { getConnection } from 'typeorm'
 import bcrypt = require('bcrypt')
+import jwt = require('jsonwebtoken')
 import { User } from '../../../entity/User'
 
 const SignUp = {
-  signUp: async (_: any, { data: { username, email, password } }) => {
+  signUp: async (_: any, { data: { username, email, password } }, ctx: any) => {
     const userRepository = getConnection().getRepository(User)
 
     const usernameInUse = await userRepository.findOne({
       where: {
-        username: username
-      }
+        username
+      },
+      relations: ['todos']
     })
 
     if (usernameInUse) {
@@ -36,7 +38,14 @@ const SignUp = {
 
     const result = await userRepository
       .save(user)
-      .then(_user => _user)
+      .then(_user => {
+        const token = jwt.sign({ currentUser: _user.id }, 'mysecret123')
+
+        ctx.res.cookie('token', token, {
+          maxAge: 1000 * 60 * 60 * 24 * 365
+        })
+        return _user
+      })
       .catch(() => ({
         message: 'DB_ERROR'
       }))

@@ -16,5 +16,5 @@ export class User {
   password: string
 
   @OneToMany(type => Todo, todo => todo.user)
-  tasks: Todo[]
+  todos: Todo[]
 }

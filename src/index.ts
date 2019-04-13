@@ -3,24 +3,38 @@ import { createConnection } from 'typeorm'
 import express = require('express')
 import { ApolloServer } from 'apollo-server-express'
 import { importSchema } from 'graphql-import'
-import path = require('path')
+import jwt = require('jsonwebtoken')
 import cookieParser = require('cookie-parser')
 import resolvers from './resolvers'
 const typeDefs = importSchema('src/schema/schema.graphql')
 
-const app = express()
 const port = 4000
+const app = express()
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  context: ({ res, req }) => ({ res, req })
 })
 
-server.applyMiddleware({ app })
+app.use(cookieParser())
 
-app.use(cookieParser('', {}))
+app.use((req: any, res: any, next) => {
+  const { token } = req.cookies
+  if (token) {
+    const { currentUser } = jwt.verify(token, 'mysecret123') as any
+    req.currentUser = currentUser
+  }
+  next()
+})
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')))
+server.applyMiddleware({
+  app,
+  cors: {
+    origin: 'http://localhost:3000',
+    credentials: true
+  }
+})
 
 createConnection().then(() => {
   app.listen({ port }, () =>
