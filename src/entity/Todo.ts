@@ -12,6 +12,6 @@ export class Todo {
   @Column('boolean', { default: false })
   completed: boolean
 
-  @ManyToOne(type => User, user => user.tasks)
+  @ManyToOne(type => User, user => user.todos)
   user: User
 }

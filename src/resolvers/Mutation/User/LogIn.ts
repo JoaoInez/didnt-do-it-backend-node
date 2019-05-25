@@ -23,7 +23,7 @@ const LogIn = {
     const validPassword = await bcrypt.compare(password, user.password)
 
     if (!validPassword) {
-      return { error: 'INVALID_CREDENTIALS' }
+      return { message: 'BAD_CREDENTIALS' }
     }
 
     const token = jwt.sign({ currentUser: user.id }, 'mysecret123')
